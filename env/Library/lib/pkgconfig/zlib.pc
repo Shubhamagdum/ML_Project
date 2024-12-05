@@ -1,8 +1,8 @@
-prefix=D:/ML_Project/env/Library
-exec_prefix=D:/ML_Project/env/Library
-libdir=D:/ML_Project/env/Library/lib
-sharedlibdir=D:/ML_Project/env/Library/lib
-includedir=D:/ML_Project/env/Library/include
+prefix=d:/ML_Project/env/Library
+exec_prefix=d:/ML_Project/env/Library
+libdir=d:/ML_Project/env/Library/lib
+sharedlibdir=d:/ML_Project/env/Library/lib
+includedir=d:/ML_Project/env/Library/include
 
 Name: zlib
 Description: zlib compression library
