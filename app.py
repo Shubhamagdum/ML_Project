@@ -13,25 +13,45 @@ scaler = pickle.load(open('D:\\ML_Project\\Notebook\\scaler.pkl' ,'rb'))
 def index():
     return render_template('index.html')
 
-@app.route('/predict', methods=['GAT','POST'])
+@app.route('/predict', methods=['GET', 'POST'])
 def predict_datapoint():
-     result=""
-     if request.method == 'POST':
-        features = [
-            float(request.form['Temperature']),
-            float(request.form['RH']),
-            float(request.form['Ws']),
-            float(request.form['Rain']),
-            float(request.form['FFMC']),
-            float(request.form['DMC']),
-            float(request.form['ISI']),
-            int(request.form['Region'])
-        ]
-        scaled_features = scaler.transform([features])
+    if request.method == 'GET':
+        # If GET request, show the form
+        return render_template('home.html', result=None)
+    
+    if request.method == 'POST':
+        try:
+            # Collecting data from form
+            features = [
+                float(request.form['Temperature']),
+                float(request.form['RH']),
+                float(request.form['Ws']),
+                float(request.form['Rain']),
+                float(request.form['FFMC']),
+                float(request.form['DMC']),
+                float(request.form['ISI']),
+                int(request.form['Classes']),
+                int(request.form['Region'])
+            ]
 
-    # Predict using model
-        prediction = model.predict(scaled_features)[0]
-        result = label_encoder.inverse_transform([prediction])[0]  # Decode the prediction
+            # Scaling input
+            scaled_features = scaler.transform([features])
+
+            # Predict using model
+            prediction = model.predict(scaled_features)[0]
+            result = "Fire" if prediction == 1 else "Not Fire"
+
+        except KeyError as e:
+            # Handle missing form keys
+            result = f"Error: Missing input for {str(e)}"
+        except ValueError:
+            # Handle invalid form values
+            result = "Error: Invalid input. Please check the entered values."
+        except Exception as e:
+            # General error handler
+            result = f"An error occurred: {str(e)}"
+        
+
 
         return render_template('home.html', result=result)
     
